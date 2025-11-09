@@ -27,8 +27,6 @@ public class StatementPrinter {
         final StringBuilder result = new StringBuilder("Statement for " + invoice.getCustomer()
                 + System.lineSeparator());
 
-        final NumberFormat frmt = NumberFormat.getCurrencyInstance(Locale.US);
-
         for (Performance performance : invoice.getPerformances()) {
 
             final int rslt = getAmount(performance);
@@ -37,23 +35,27 @@ public class StatementPrinter {
             volumeCredits += getVolumeCredits(performance);
 
             // print line for this order
-            result.append(String.format("  %s: %s (%s seats)%n", getPlay(performance).getName(), frmt.format(rslt
-                    / Constants.PERCENT_FACTOR), performance.getAudience()));
+            result.append(String.format("  %s: %s (%s seats)%n", getPlay(performance).getName(),
+                    usd(getAmount(performance)), performance.getAudience()));
             totalAmount += rslt;
         }
-        result.append(String.format("Amount owed is %s%n", frmt.format(totalAmount / Constants.PERCENT_FACTOR)));
+        result.append(String.format("Amount owed is %s%n", usd(totalAmount)));
         result.append(String.format("You earned %s credits%n", volumeCredits));
         return result.toString();
     }
 
+    private static String usd(int totalAmount) {
+        return NumberFormat.getCurrencyInstance(Locale.US).format(totalAmount / Constants.PERCENT_FACTOR);
+    }
+
     private static int getVolumeCredits(Performance performance) {
-        int result = 0;
-        result += Math.max(performance.getAudience() - Constants.BASE_VOLUME_CREDIT_THRESHOLD, 0);
+        int volumeCredits = 0;
+        volumeCredits += Math.max(performance.getAudience() - Constants.BASE_VOLUME_CREDIT_THRESHOLD, 0);
         // add extra credit for every five comedy attendees
         if ("comedy".equals(getPlay(performance).getType())) {
-            result += performance.getAudience() / Constants.COMEDY_EXTRA_VOLUME_FACTOR;
+            volumeCredits += performance.getAudience() / Constants.COMEDY_EXTRA_VOLUME_FACTOR;
         }
-        return result;
+        return volumeCredits;
     }
 
     private static Play getPlay(Performance performance) {

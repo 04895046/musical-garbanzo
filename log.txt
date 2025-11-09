@@ -1,5 +1,6 @@
-055cb9e (HEAD -> main, origin/main, origin/HEAD) Task 2.1
+c6b57b3 (HEAD -> main) Task 2.2
+055cb9e (origin/main, origin/HEAD) Task 2.1
 42453e2 idk
 5a821a7 Task 1.2
 b605253 Task 1.1
-c71a63a Initial commit
+c71a63a Initial commi
