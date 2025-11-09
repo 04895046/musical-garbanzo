@@ -25,14 +25,14 @@ public class StatementPrinter {
         final StringBuilder result = new StringBuilder("Statement for " + invoice.getCustomer()
                 + System.lineSeparator());
 
-        int totalAmount = 0;
-        totalAmount = getTotalAmount(result, totalAmount);
+        final int totalAmount = getTotalAmount(result);
         result.append(String.format("Amount owed is %s%n", usd(totalAmount)));
         result.append(String.format("You earned %s credits%n", getTotalVolumeCredits()));
         return result.toString();
     }
 
-    private int getTotalAmount(StringBuilder result, int totalAmount) {
+    private int getTotalAmount(StringBuilder result) {
+        int totalAmount = 0;
         for (Performance performance : invoice.getPerformances()) {
 
             final int rslt = getAmount(performance);
